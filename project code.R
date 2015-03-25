@@ -1,8 +1,7 @@
                           #Directory links
                           #For Adam
-adult <- read.table("/home/huaraz2/Desktop/Comp stats project/adults.txt", header =  FALSE, sep <- ",")
+adult <- read.table("/home/huaraz2/Desktop/Comp-Stats-Project/adults.txt", header =  FALSE, sep <- ",")
                           #For Joe
-#adult <- read.table("H:/My Documents/adults.txt", header =  FALSE, sep <- ",") #(school computer)
 #adult <- read.table("H:/My Documents/adults.txt", header =  FALSE, sep <- ",") #(home computer)
 
 adult$V3 <- NULL
