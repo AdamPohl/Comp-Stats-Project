@@ -8,6 +8,7 @@ adult$V3 <- NULL
 names(adult) <- c('Age', 'Workclass', 'EduCat', 'EduNum', 'Marital-status', 'Occupation', 'Relationship', 'Race', 'Sex', 'Capital-Gain', 'Capital-Loss', 'HPW', 'Native-Country', 'Income')
 head(adult)
 
+#How does someone's race affect their yearly income.
 #White Race Vs Income.
 'White Race Greater Than'
 WhiteRace <- subset(adult, adult[,"Race"] == "White", select <- c(Race, Income))
@@ -64,6 +65,10 @@ BlackRaceLessThan <- subset(adult, adult[,"Race"] == "Black" & adult[,"Income"] 
 nrow(BlackRaceLessThan) / nrow(BlackRace) * 100
 nrow(BlackRaceLessThan) / nrow(adult) * 100
 
+#Spread of different races in the census.
+race <- rbind(WhiteRace, AsianPacIslanderRace, AmerIndianEskimoRace, OtherRace, BlackRace)
+race$Income <- NULL
+barplot(table(race), xlab = "Race", ylab = "no. of people", col = rainbow(6))
                     #Chapter 3 Research questions
 #Is there a difference in Capital gains between Males and Females?
 #Does the Race affect the number of hours per week people work?
