@@ -8,7 +8,7 @@ adult$V3 <- NULL
 names(adult) <- c('Age', 'Workclass', 'EduCat', 'EduNum', 'Marital-status', 'Occupation', 'Relationship', 'Race', 'Sex', 'Capital-Gain', 'Capital-Loss', 'HPW', 'Native-Country', 'Income')
 head(adult)
 
-#How does someone's race affect their yearly income.
+                      #How does someone's race affect their yearly income.
 #White Race Vs Income.
 'White Race Greater Than'
 WhiteRace <- subset(adult, adult[,"Race"] == "White", select <- c(Race, Income))
@@ -69,10 +69,13 @@ nrow(BlackRaceLessThan) / nrow(adult) * 100
 race <- rbind(WhiteRace, AsianPacIslanderRace, AmerIndianEskimoRace, OtherRace, BlackRace)
 race$Income <- NULL
 barplot(table(race), xlab = "Race", ylab = "no. of people", col = rainbow(6))
+
                     #Chapter 3 Research questions
 #Is there a difference in Capital gains between Males and Females?
+
 #Does the Race affect the number of hours per week people work?
 
                     #Chapter 4 Research questions
 #Can we build a model to see which variables effect the income?
+
 #Test if Education and Capital gain are related. You can use as many of the other variables in your model you want.
