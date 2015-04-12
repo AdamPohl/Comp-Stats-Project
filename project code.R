@@ -20,26 +20,26 @@ WhiteRaceLessThan <- subset(adult, adult[,"Race"] == "White" & adult[,"Income"] 
 (nrow(WhiteRaceLessThan) / nrow(WhiteRace)) * 100
 (nrow(WhiteRaceLessThan) / nrow(adult)) * 100
 
-#AsianPacIslander Race Vs Income.
-'Asian Pac Islander Race Greater Than'
-AsianPacIslanderRace <- subset(adult, adult[,"Race"] == "Asian Pac Islander", select <- c(Race, Income))
-AsianPacIslanderRaceGreaterThan <- subset(adult, adult[,"Race"] == "Asian Pac Islander" & adult[,"Income"] == ">50K", select <- c(Race, Income))
+#Asian-Pac-Islander Race Vs Income.
+'Asian-Pac-Islander Race Greater Than'
+AsianPacIslanderRace <- subset(adult, adult[,"Race"] == "AP Islander", select <- c(Race, Income))
+AsianPacIslanderRaceGreaterThan <- subset(adult, adult[,"Race"] == "AP Islander" & adult[,"Income"] == ">50K", select <- c(Race, Income))
 nrow(AsianPacIslanderRaceGreaterThan) / nrow(AsianPacIslanderRace) * 100
 nrow(AsianPacIslanderRaceGreaterThan) / nrow(adult) * 100
-'Asian Pac Islander Race Less Than'
-AsianPacIslanderRaceLessThan <- subset(adult, adult[,"Race"] == "Asian Pac Islander" & adult[,"Income"] == "<=50K", select <- c(Race, Income))
+'Asian-Pac-Islander Race Less Than'
+AsianPacIslanderRaceLessThan <- subset(adult, adult[,"Race"] == "AP Islander" & adult[,"Income"] == "<=50K", select <- c(Race, Income))
 nrow(AsianPacIslanderRace)
 nrow(AsianPacIslanderRaceLessThan) / nrow(AsianPacIslanderRace) * 100
 nrow(AsianPacIslanderRaceLessThan) / nrow(adult) * 100
 
-#Amer Indian Eskimo Race Vs Income.
-'Amer Indian Eskimo Race Greater Than'
-AmerIndianEskimoRace <- subset(adult, adult[,"Race"] == "Amer Indian Eskimo", select <- c(Race, Income))
-AmerIndianEskimoRaceGreaterThan <- subset(adult, adult[,"Race"] == "Amer Indian Eskimo" & adult[,"Income"] == ">50K", select <- c(Race, Income))
+#Amer-Indian-Eskimo Race Vs Income.
+'Amer-Indian-Eskimo Race Greater Than'
+AmerIndianEskimoRace <- subset(adult, adult[,"Race"] == "AI Eskimo", select <- c(Race, Income))
+AmerIndianEskimoRaceGreaterThan <- subset(adult, adult[,"Race"] == "AI Eskimo" & adult[,"Income"] == ">50K", select <- c(Race, Income))
 nrow(AmerIndianEskimoRaceGreaterThan) / nrow(AmerIndianEskimoRace) * 100
 nrow(AmerIndianEskimoRaceGreaterThan) / nrow(adult) * 100
-'Amer Indian Eskimo Race Less Than'
-AmerIndianEskimoRaceLessThan <- subset(adult, adult[,"Race"] == "Amer Indian Eskimo" & adult[,"Income"] == "<=50K", select <- c(Race, Income))
+'Amer-Indian-Eskimo Race Less Than'
+AmerIndianEskimoRaceLessThan <- subset(adult, adult[,"Race"] == "AI Eskimo" & adult[,"Income"] == "<=50K", select <- c(Race, Income))
 nrow(AmerIndianEskimoRaceLessThan) / nrow(AmerIndianEskimoRace) * 100
 nrow(AmerIndianEskimoRaceLessThan) / nrow(adult) * 100
 
@@ -68,7 +68,12 @@ nrow(BlackRaceLessThan) / nrow(adult) * 100
 #Spread of different races in the census.
 race <- rbind(WhiteRace, AsianPacIslanderRace, AmerIndianEskimoRace, OtherRace, BlackRace)
 race$Income <- NULL
+table(race)
 barplot(table(race), xlab = "Race", ylab = "no. of people", col = rainbow(6))
+
+#Spread of sex in the census.
+barplot(table(adult[, "Sex"]), xlab = "Sex", ylab = "no. of people", col = rainbow(6))
+table(adult[, "Sex"])
 
                     #Chapter 3 Research questions
 #Is there a difference in Capital gains between Males and Females?
