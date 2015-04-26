@@ -6,7 +6,6 @@ adult <- read.table("/home/huaraz2/Desktop/Comp-Stats-Project/adults.txt", heade
 
 adult$V3 <- NULL
 names(adult) <- c('Age', 'Workclass', 'EduCat', 'EduNum', 'Marital-status', 'Occupation', 'Relationship', 'Race', 'Sex', 'Capital-Gain', 'Capital-Loss', 'HPW', 'Native-Country', 'Income')
-head(adult)
 
                       #How does someone's race affect their yearly income.
 #White Race Vs Income.
@@ -15,6 +14,7 @@ WhiteRace <- subset(adult, adult[,"Race"] == "White", select <- c(Race, Income))
 WhiteRaceGreaterThan <- subset(adult, adult[,"Race"] == "White" & adult[,"Income"] == ">50K", select <- c(Race, Income))
 (nrow(WhiteRaceGreaterThan) / nrow(WhiteRace)) * 100
 (nrow(WhiteRaceGreaterThan) / nrow(adult)) * 100
+
 'White Race Less Than'
 WhiteRaceLessThan <- subset(adult, adult[,"Race"] == "White" & adult[,"Income"] == "<=50K", select <- c(Race, Income))
 (nrow(WhiteRaceLessThan) / nrow(WhiteRace)) * 100
@@ -28,7 +28,6 @@ nrow(AsianPacIslanderRaceGreaterThan) / nrow(AsianPacIslanderRace) * 100
 nrow(AsianPacIslanderRaceGreaterThan) / nrow(adult) * 100
 'Asian-Pac-Islander Race Less Than'
 AsianPacIslanderRaceLessThan <- subset(adult, adult[,"Race"] == "AP Islander" & adult[,"Income"] == "<=50K", select <- c(Race, Income))
-nrow(AsianPacIslanderRace)
 nrow(AsianPacIslanderRaceLessThan) / nrow(AsianPacIslanderRace) * 100
 nrow(AsianPacIslanderRaceLessThan) / nrow(adult) * 100
 
@@ -65,18 +64,31 @@ BlackRaceLessThan <- subset(adult, adult[,"Race"] == "Black" & adult[,"Income"] 
 nrow(BlackRaceLessThan) / nrow(BlackRace) * 100
 nrow(BlackRaceLessThan) / nrow(adult) * 100
 
+#Graph of Race Vs. Income.
+raceVincome <- rbind(WhiteRace, AsianPacIslanderRace, AmerIndianEskimoRace, OtherRace, BlackRace)
+RVI <- table(raceVincome)
+RVI
+barplot(RVI[,1], beside = TRUE, main = "Race Vs. <=50K income", xlab = "Race", ylab = "No. of people", col = rainbow(8))
+barplot(RVI[,2], beside = TRUE, main = "Race Vs. >50K income", xlab = "Race", ylab = "No. of people", col = rainbow(7))
+
 #Spread of different races in the census.
 race <- rbind(WhiteRace, AsianPacIslanderRace, AmerIndianEskimoRace, OtherRace, BlackRace)
 race$Income <- NULL
 table(race)
-barplot(table(race), xlab = "Race", ylab = "no. of people", col = rainbow(6))
+barplot(table(race), main = "Spread of the Race through the Census", xlab = "Race", ylab = "No. of people", col = rainbow(6))
 
 #Spread of sex in the census.
-pie(table(adult[, "Sex"]), col = rainbow(2))
+pie(table(adult[, "Sex"]),main = "Spread of gender through the Census",  col = rainbow(2))
 table(adult[, "Sex"])
 
                     #Chapter 3 Research questions
 #Is there a difference in Capital gains between Males and Females?
+Sex <- adult[, "Sex"]
+CapitalGain <- adult[,"Capital-Gain"]
+SexVCapitalGain <- table(CapitalGain ,Sex)
+nrow(SexVCapitalGain)
+barplot(SexVCapitalGain[2:119, 1], beside = TRUE, col = rainbow(200))
+barplot(SexVCapitalGain[2:119, 2], beside = TRUE, col = rainbow(200))
 
 #Does the Race affect the number of hours per week people work?
 
