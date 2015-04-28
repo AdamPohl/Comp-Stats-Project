@@ -85,7 +85,7 @@ table(adult[, "Sex"])
 Sex = adult[, "Sex"]
 CapitalGain = adult[,"Capital-Gain"]
 SexVCapitalGain = table(CapitalGain,Sex)
-barplot(SexVCapitalGain[2:119,1], beside = TRUE, main = "Spread of Capital GAins for Females", col = rainbow(50))
+barplot(SexVCapitalGain[2:119,1], beside = TRUE, main = "Spread of Capital Gains for Females", col = rainbow(50))
 barplot(SexVCapitalGain[2:119,2], beside = TRUE, main = "Spread of Capital Gains for Males", col = rainbow(60))
 barplot(SexVCapitalGain[1,], beside = TRUE, main = "Zero Capital Gains for Males and Females", col = rainbow(2))
 
@@ -112,21 +112,41 @@ symmetry.test(SexVCapitalGain[,1])
 shapiro.test(SexVCapitalGain[,2])
 symmetry.test(SexVCapitalGain[,2])
 
-SVCG = c(SexVCapitalGain[,1], SexVCapitalGain[,2])
+"H0: There is no difference in Capital Gains for Males and Females."
+"H1: There is a difference in Capital Gains for Males and Females."
+
+SvCG = c(SexVCapitalGain[,1], SexVCapitalGain[,2])
 ratiovar = rep(0,1000)
 for (i in 1:1000){
   s = shuffle(238)
-  ratiovar[i] = var(SVCG[s[1:119]]) / var(SVCG[s[120:238]])
+  ratiovar[i] = var(SvCG[s[1:119]]) / var(SvCG[s[120:238]])
 }
-originalratio = var(SVCG[1:119]) / var(SVCG[120:238])
-"originalratio"
-originalratio
+originalratio = var(SvCG[1:119]) / var(SvCG[120:238])
+#If this is > 0.05 then we can accept the null hypothesis that there is no link between the gender of a person and their capital gain.
 pval = length(ratiovar[ratiovar >= originalratio]) / 1000
-"pval"
+if(pval > 0.05){
+  "There is not enough evidence to discard H0."
+} else {
+  "There is enough evidence to discard H0."
+}
 pval
 
 
 #Does the Race affect the number of hours per week people work?
+RvNHW = lm(adult[,12]~adult[,8])
+summary(RvNHW)
+anova(RvNHW)
+
+plot(adult[,12], adult[,8])
+lines(adult[,12], RvNHW$fitted.values)
+
+par(mfrow = c(2,3))
+plot(RvNHW, which = 1:6)
+
+par(mfrow = c(1,2))
+plot(RvNHW, which = 1:2)
+plot(RvNHW, which = 3:4)
+plot(RvNHW, which = 5:6)
 
                     #Chapter 4 Research questions
 #Can we build a model to see which variables effect the income?
