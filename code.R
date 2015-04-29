@@ -1,12 +1,23 @@
 # install.packages("lawstat", repos="http://cran.us.r-project.org")
 # install.packages("permute", repos="http://cran.us.r-project.org")
-                          #Directory links
+# install.packages("plotrix", repos="http://cran.us.r-project.org")
+# install.packages("MASS", repos="http://cran.us.r-project.org")
+library("plotrix")
+library("lawstat")
+library("permute")
+library("MASS")
+                          #Directory link
 adult = read.table("/home/huaraz2/Desktop/Comp-Stats-Project/adults.txt", header =  FALSE, sep = ",")
 
-adult$V3 = NULL
+adult$V3 = NULL #This removes the fnlwgt variable.
+
 names(adult) = c('Age', 'Workclass', 'EduCat', 'EduNum', 'Marital-status', 'Occupation', 'Relationship', 'Race', 'Sex', 'Capital-Gain', 'Capital-Loss', 'HPW', 'Native-Country', 'Income')
 
-                      #How does someone's race affect their yearly income.
+                          #Exploritory Data Section
+summary(adult)
+
+# How does someone's race affect their yearly income.
+
 #White Race Vs Income.
 'White Race Greater Than'
 WhiteRace = subset(adult, adult[,"Race"] == "White", select = c(Race, Income))
@@ -77,7 +88,7 @@ table(race)
 barplot(table(race), main = "Spread of the Race through the Census", xlab = "Race", ylab = "No. of people", col = rainbow(6))
 
 #Spread of sex in the census.
-pie(table(adult[, "Sex"]), main = "Spread of gender through the Census",  col = rainbow(2))
+pie3D(table(adult[, "Sex"]), main = "Spread of gender through the Census",  col = rainbow(2))
 table(adult[, "Sex"])
 
                     #Chapter 3 Research questions
@@ -101,8 +112,6 @@ MaleCapitalGain = subset(SexVCapitalGain, SexVCapitalGain[, 3] > 0, select = c(3
 nrow(MaleCapitalGain)
 nrow(FemaleCapitalGain)
 
-library("lawstat")
-library("permute")
 
 var.test(SexVCapitalGain[,1], SexVCapitalGain[,2])
 #Females
@@ -116,39 +125,38 @@ symmetry.test(SexVCapitalGain[,2])
 "H1: There is a difference in Capital Gains for Males and Females."
 
 SvCG = c(SexVCapitalGain[,1], SexVCapitalGain[,2])
-ratiovar = rep(0,1000)
+MeanDiff = rep(0,1000)
 for (i in 1:1000){
   s = shuffle(238)
-  ratiovar[i] = var(SvCG[s[1:119]]) / var(SvCG[s[120:238]])
+  MeanDiff[i] = mean(SvCG[s[1:119]]) - mean(SvCG[s[120:238]])
 }
-originalratio = var(SvCG[1:119]) / var(SvCG[120:238])
+originalMeandiff = mean(SvCG[1:119]) - mean(SvCG[120:238])
 #If this is > 0.05 then we can accept the null hypothesis that there is no link between the gender of a person and their capital gain.
-pval = length(ratiovar[ratiovar >= originalratio]) / 1000
+pval = length(MeanDiff[MeanDiff >= originalMeandiff]) / 1000
 if(pval > 0.05){
-  "There is not enough evidence to discard H0."
+  "As the pval > 0.05 there is not enough evidence to discard H0."
 } else {
-  "There is enough evidence to discard H0."
+  "As the pval < 0.05 there is enough evidence to discard H0."
 }
 pval
 
 
 #Does the Race affect the number of hours per week people work?
+# cor(adult[,12], as.numeric(adult[,8]))
+# cor.test(adult[,12],as.numeric(adult[,8]))
 RvNHW = lm(adult[,12]~adult[,8])
 summary(RvNHW)
-anova(RvNHW)
-
-plot(adult[,12], adult[,8])
-lines(adult[,12], RvNHW$fitted.values)
-
-par(mfrow = c(2,3))
-plot(RvNHW, which = 1:6)
 
 par(mfrow = c(1,2))
 plot(RvNHW, which = 1:2)
 plot(RvNHW, which = 3:4)
 plot(RvNHW, which = 5:6)
 
+
                     #Chapter 4 Research questions
 #Can we build a model to see which variables effect the income?
+model = lm(as.numeric(adult[,14])~ adult[,1] + adult[,2] + adult[,3] + adult[,4] + adult[,6] + adult[,7] + adult[,8] + adult[,9] + adult[,10] + adult[,11] + adult[,12] + adult[,13])
+summary(model)
+
 
 #Test if Education and Capital gain are related. You can use as many of the other variables in your model you want.
