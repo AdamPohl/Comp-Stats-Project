@@ -204,32 +204,32 @@ summary(model)
 cor.test(adult[, 10], as.numeric(adult[, 3]))
 
 #Be aware that this for-loop takes a long time to run.
-# x = {}
-# y = {}
-# for (i in 1:30162) {
-#   if(adult[i, "EduCat"] != "Bachelors") {
-#     if(adult[i, "EduCat"] != "Doctorate") {
-#       if(adult[i, "EduCat"] != "Masters") {
-#         if(adult[i, "EduCat"] != "Prof-school") {
-#           x = rbind(x, adult[i,])
-#         } else {
-#           y = rbind(y, adult[i,])
-#         }
-#       } else {
-#         y = rbind(y, adult[i,])
-#       }
-#     } else {
-#       y = rbind(y, adult[i,])
-#     }
-#   } else {
-#     y = rbind(y, adult[i,])
-#     }
-# }
-#
-# model1 = lm(x[, 10]~ x[, 3])
-# summary(model1)
-# cor.test(x[, 10], as.numeric(x[, 3]))
-#
-# model2 = lm(y[, 10]~ y[, 3])
-# summary(model2)
-# cor.test(y[, 10], as.numeric(y[, 3]))
+x = {}
+y = {}
+for (i in 1:30162) {
+  if(adult[i, "EduCat"] != "Bachelors") {
+    if(adult[i, "EduCat"] != "Doctorate") {
+      if(adult[i, "EduCat"] != "Masters") {
+        if(adult[i, "EduCat"] != "Prof-school") {
+          x = rbind(x, adult[i,])
+        } else {
+          y = rbind(y, adult[i,])
+        }
+      } else {
+        y = rbind(y, adult[i,])
+      }
+    } else {
+      y = rbind(y, adult[i,])
+    }
+  } else {
+    y = rbind(y, adult[i,])
+    }
+}
+
+model1 = lm(x[, 10]~ x[, 3])
+summary(model1)
+cor.test(x[, 10], as.numeric(x[, 3]))
+
+model2 = lm(y[, 10]~ y[, 3])
+summary(model2)
+cor.test(y[, 10], as.numeric(y[, 3]))
