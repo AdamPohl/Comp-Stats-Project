@@ -188,10 +188,13 @@ plot(PCA$sd, type = "l", xlab = "Component number", ylab = "Eigenvalues", main =
 
 
 "Q4: Test if Education and Capital gain are related. You can use as many of the other variables in your model you want."
-model = lm(adult[, 10]~adult[, 4])
+model = lm(adult[, 10]~adult[, 3])
 summary(model)
+cor(model)
 
+#Be aware that this for loop takes a long time to run.
 # x = {}
+# y = {}
 # for (i in 1:32561) {
 #   if(adult[i, "EduCat"] != "Bachelors") {
 #     if(adult[i, "EduCat"] != "Doctorate") {
@@ -201,6 +204,15 @@ summary(model)
 #         }
 #       }
 #     }
+#   } else {
+#     y = rbind(y, adult[i,])
 #   }
 # }
-# summary(x)
+#
+# model1 = lm(x[, 10]~ x[, 3])
+# summary(model1)
+# cor(model2)
+#
+# model2 = lm(y[, 10]~ y[, 3])
+# summary(model2)
+# cor(model2)
