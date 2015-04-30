@@ -203,7 +203,7 @@ model = lm(adult[, 10]~adult[, 3])
 summary(model)
 cor.test(adult[, 10], as.numeric(adult[, 3]))
 
-#Be aware that this for-loop takes a long time to run.
+#Be aware that this for-loop takes a long time to run. So have break, have a KitKat. (Oh and get me one too :) )
 x = {}
 y = {}
 for (i in 1:30162) {
@@ -225,6 +225,8 @@ for (i in 1:30162) {
     y = rbind(y, adult[i,])
     }
 }
+
+#Daaammm!!! That is one nasty for-loop
 
 model1 = lm(x[, 10]~ x[, 3])
 summary(model1)
