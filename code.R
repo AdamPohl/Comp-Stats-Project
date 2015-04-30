@@ -9,6 +9,8 @@ library("MASS")
                           #Directory link
 adult = read.table("/home/huaraz2/Desktop/Comp-Stats-Project/adults.txt", header =  FALSE, sep = ",")
 
+adult = na.omit(adult)
+
 adult$V3 = NULL #This removes the fnlwgt variable.
 
 names(adult) = c('Age', 'Workclass', 'EduCat', 'EduNum', 'Marital-status', 'Occupation', 'Relationship', 'Race', 'Sex', 'Capital-Gain', 'Capital-Loss', 'HPW', 'Native-Country', 'Income')
@@ -16,7 +18,7 @@ names(adult) = c('Age', 'Workclass', 'EduCat', 'EduNum', 'Marital-status', 'Occu
                           #Exploritory Data Section
 summary(adult)
 
-# How does someone's race affect their yearly income.
+"How does someone's race affect their yearly income."
 
 #White Race Vs Income.
 'White Race Greater Than'
@@ -96,13 +98,14 @@ table(adult[, "Sex"])
 Sex = adult[, "Sex"]
 CapitalGain = adult[,"Capital-Gain"]
 SexVCapitalGain = table(CapitalGain,Sex)
-barplot(SexVCapitalGain[2:119,1], xlab = "Capital Gains", ylab = "Number of people", beside = TRUE, main = "Spread of Capital Gains for Females", col = rainbow(50))
-barplot(SexVCapitalGain[2:119,2], xlab = "Capital Gains", ylab = "Number of people", beside = TRUE, main = "Spread of Capital Gains for Males", col = rainbow(60))
+nrow(SexVCapitalGain)
+barplot(SexVCapitalGain[2:118,1], xlab = "Capital Gains", ylab = "Number of people", beside = TRUE, main = "Spread of Capital Gains for Females", col = rainbow(50))
+barplot(SexVCapitalGain[2:118,2], xlab = "Capital Gains", ylab = "Number of people", beside = TRUE, main = "Spread of Capital Gains for Males", col = rainbow(60))
 barplot(SexVCapitalGain[1,], xlab = "Capital Gains", ylab = "Number of people", beside = TRUE, main = "Zero Capital Gains for Males and Females", col = rainbow(2))
 
 #My original thought was to go through the differences and work something from there but this never panned out but hey it is nice code so I left it in.
 Difference = {}
-for (i in 1:119){
+for (i in 1:118){
   X = SexVCapitalGain[i,1] - SexVCapitalGain[i,2]
   Difference = rbind(Difference, X)
   }
@@ -128,10 +131,10 @@ symmetry.test(SexVCapitalGain[,2])
 SvCG = c(SexVCapitalGain[,1], SexVCapitalGain[,2])
 MeanDiff = rep(0,1000)
 for (i in 1:1000){
-  s = shuffle(238)
-  MeanDiff[i] = mean(SvCG[s[1:119]]) - mean(SvCG[s[120:238]])
+  s = shuffle(236)
+  MeanDiff[i] = mean(SvCG[s[1:118]]) - mean(SvCG[s[119:236]])
 }
-originalMeandiff = mean(SvCG[1:119]) - mean(SvCG[120:238])
+originalMeandiff = mean(SvCG[1:118]) - mean(SvCG[119:236])
 #If pval < 0.05 then we can reject the null hypothesis that there is no link between the gender of a person and their capital gain.
 pval = length(MeanDiff[MeanDiff >= originalMeandiff]) / 1000
 if(pval > 0.05){
@@ -151,11 +154,22 @@ plot(RvNHW, which = 1:2)
 plot(RvNHW, which = 3:4)
 plot(RvNHW, which = 5:6)
 
+# OH FOR FUDGE SAKE!!!!
+
+rVnhw = table(adult[,12], adult[,8])
+shapiro.test(rVnhw)
+
+
+#I HATE THIS PROJECT!!! (just don't tell Andreas)
 
                     #Chapter 4 Research questions
 "Q3: Can we build a model to see which variables effect the income?"
-model = lm(as.numeric(adult[,14])~ adult[,1] + adult[,2] + adult[,4] + adult[,6] + adult[,8] + adult[,9] + adult[,10] + adult[,11] + adult[,12] + adult[,13])
-summary(model)
+par(mfrow = c(1,1))
+occupation = as.numeric(adult[, "Occupation"])
+sex = as.numeric(adult[, "Sex"])
+
+model1 = lm(as.numeric(adult[,14])~ adult[,1] + adult[,2] + adult[,4] + adult[,6] + adult[,8] + adult[,9] + adult[,10] + adult[,11] + adult[,12] + adult[,13])
+summary(model1)
 
 #From the regression table we can imply that there is little or no link between a person's native country and their income. Therefore we will delete this from our model and work out a new regression table.
 
@@ -174,45 +188,48 @@ summary(model4)
 
 #From the regression table we can imply that all of the variables in model4 are signifcant in deciding what a person's income will be.  we will now perform a Principal Componant Analysis to check if what variables are actually linked to the income.
 
-model5 = subset(adult, select = c('Age', 'EduNum', 'Capital-Gain', 'Capital-Loss', 'HPW'))
-occupation = as.numeric(adult[, "Occupation"])
-sex = as.numeric(adult[, "Sex"])
+model6 = subset(adult, select = c('Age', 'EduNum', 'Capital-Gain', 'Capital-Loss', 'HPW'))
+model6 = cbind(model6, occupation, sex)
+PCA2 = prcomp(model6[,1:7])
+PCA2
+summary(PCA2)
 
-model5 = cbind(model5, occupation, sex)
-PCA = prcomp(model5[,1:7])
-PCA
-summary(PCA)
-par(mfrow = c(1,1))
-plot(PCA$sd, type = "l", xlab = "Component number", ylab = "Eigenvalues", main = "Scree plot")
+plot(PCA2$sd, type = "l", xlab = "Component number", ylab = "Eigenvalues", main = "Scree plot")
 
 
 
 "Q4: Test if Education and Capital gain are related. You can use as many of the other variables in your model you want."
 model = lm(adult[, 10]~adult[, 3])
 summary(model)
-cor(model)
+cor.test(adult[, 10], as.numeric(adult[, 3]))
 
-#Be aware that this for loop takes a long time to run.
+#Be aware that this for-loop takes a long time to run.
 # x = {}
 # y = {}
-# for (i in 1:32561) {
+# for (i in 1:30162) {
 #   if(adult[i, "EduCat"] != "Bachelors") {
 #     if(adult[i, "EduCat"] != "Doctorate") {
 #       if(adult[i, "EduCat"] != "Masters") {
-#         if(adult[i, "EduCat"] != "Prof-school"){
+#         if(adult[i, "EduCat"] != "Prof-school") {
 #           x = rbind(x, adult[i,])
+#         } else {
+#           y = rbind(y, adult[i,])
 #         }
+#       } else {
+#         y = rbind(y, adult[i,])
 #       }
+#     } else {
+#       y = rbind(y, adult[i,])
 #     }
 #   } else {
 #     y = rbind(y, adult[i,])
-#   }
+#     }
 # }
 #
 # model1 = lm(x[, 10]~ x[, 3])
 # summary(model1)
-# cor(model2)
+# cor.test(x[, 10], as.numeric(x[, 3]))
 #
 # model2 = lm(y[, 10]~ y[, 3])
 # summary(model2)
-# cor(model2)
+# cor.test(y[, 10], as.numeric(y[, 3]))
